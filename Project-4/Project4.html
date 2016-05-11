@@ -1,0 +1,315 @@
+<!doctype html>
+<html>
+<head>
+<style type = "text/css">
+	body{
+		background-image:url(Background.jpg);
+	
+	}
+  h3{color:white;
+	font-family:arial;
+	text-align:center;
+	font-size: 250%;
+	text-shadow: 1px 0 0
+	} 
+	p{
+		text-align:center;
+	}
+	
+	
+	.button {
+   border: 3px solid #0a3c59;
+   background: #277fba;
+   background: -webkit-gradient(linear, left top, left bottom, from(#2e3a42), to(#277fba));
+   background: -webkit-linear-gradient(top, #2e3a42, #277fba);
+   background: -moz-linear-gradient(top, #2e3a42, #277fba);
+   background: -ms-linear-gradient(top, #2e3a42, #277fba);
+   background: -o-linear-gradient(top, #2e3a42, #277fba);
+   background-image: -ms-linear-gradient(top, #2e3a42 0%, #277fba 100%);
+   padding: 10px 20px;
+   -webkit-border-radius: 18px;
+   -moz-border-radius: 18px;
+   border-radius: 18px;
+   -webkit-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   -moz-box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   box-shadow: rgba(255,255,255,0.4) 0 1px 0, inset rgba(255,255,255,0.4) 0 1px 0;
+   text-shadow: #1d455e 0 1px 0;
+   color: #ffffff;
+   font-size: 16px;
+   font-family: helvetica, serif;
+   text-decoration: none;
+   vertical-align: middle;
+   }
+.button:hover {
+   border: 3px solid #0a3c59;
+   text-shadow: #1e4158 0 1px 0;
+   background: #3e779d;
+   background: -webkit-gradient(linear, left top, left bottom, from(#65a9d7), to(#3e779d));
+   background: -webkit-linear-gradient(top, #65a9d7, #3e779d);
+   background: -moz-linear-gradient(top, #65a9d7, #3e779d);
+   background: -ms-linear-gradient(top, #65a9d7, #3e779d);
+   background: -o-linear-gradient(top, #65a9d7, #3e779d);
+   background-image: -ms-linear-gradient(top, #65a9d7 0%, #3e779d 100%);
+   color: #fff;
+   }
+.button:active {
+   text-shadow: #1e4158 0 1px 0;
+   border: 3px solid #0a3c59;
+   background: #65a9d7;
+   background: -webkit-gradient(linear, left top, left bottom, from(#3e779d), to(#3e779d));
+   background: -webkit-linear-gradient(top, #3e779d, #65a9d7);
+   background: -moz-linear-gradient(top, #3e779d, #65a9d7);
+   background: -ms-linear-gradient(top, #3e779d, #65a9d7);
+   background: -o-linear-gradient(top, #3e779d, #65a9d7);
+   background-image: -ms-linear-gradient(top, #3e779d 0%, #65a9d7 100%);
+   color: #fff;
+   }
+   
+  input
+{
+
+
+
+background-repeat:repeat-x;
+border: 0px solid;
+height:50px;
+width:300px;
+font-size: 110%;
+color: white;
+background-color:#474771;
+}
+	
+	
+	
+</style>
+
+<Anagram Finder>
+</head>
+<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+var counter = 1;
+var current_word = "";
+var word_counter = 1;
+var word_string = "";
+var word_array = [];
+var flag = 0;
+	function get_word(){
+		//alert("inside function get_word");
+		reset_variables();
+		
+		//see if the document is ready
+	var requestVars = "";
+
+
+//do the ajax call using jquery
+$(document).ready(function() {
+
+
+//do the ajax call
+$.ajax({
+        url: "getWord.php",
+        dataType: 'xml',
+        success: function(xml){
+		
+		var x;
+		
+		$(xml).find('Word').each(function(){
+            x = $(this).find('value').text();
+			
+			});
+			append(x);
+			//set current word to x so it is availble for other functions
+			current_word = x;
+            },
+        error: function(xhr,err){
+            alert("readyState: "+ xhr.readyState + "\nstatus: " + xhr.status + "\nerror:" + err);
+            alert("responseText: " + xhr.responseText);
+            }
+    });
+
+
+
+
+
+});
+
+
+
+
+}
+	
+	
+	//this function will add the new word to the table
+	function append(input){
+		//alert(input);
+	var table = document.getElementById("myTable");
+	var row = table.insertRow(counter);
+	var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+	cell1.innerHTML = input;
+	cell2.innerHTML = "";
+	counter++;
+	
+	}
+	
+	
+	
+	//this function will check the xml and try to parce out a word
+	function viewer_function(input){
+		//alert("inside Viewer Function");
+	}
+	
+	
+	
+	//this function will be invoked whenever the user
+	//presses enter while in the textbox and whenever 
+	function word_submitted_response(){
+		
+		//get the user input from the textbox
+	var word = document.getElementById('input_box').value;
+		word = word.trim();
+		
+		//create arrayed versions for comparisons
+		var temp_word_array = word.split("");
+		var current_word_array = current_word.split("");
+		//alert(temp_word_array.length);
+		//alert(current_word_array.length);
+		
+		//check to see if the word was already used
+		var found_index_2 = word_array.indexOf(word);
+		if(found_index_2 > 0){
+			alert(word + " was already used as an anagram for this word.");
+			return;
+		}
+		
+		
+		//check to see if the length of what you submitted was too long
+		if(temp_word_array.length > current_word_array.length-1){
+			alert("The word you entered was longer than word above and therefore cannot be an Anagram");
+			return;
+		}
+		
+		
+		//now check to see if the correct characters were used
+		var index = 0;
+		while(index < temp_word_array.length){
+			var temp = temp_word_array[index];
+			//alert(temp);
+			
+			//create a variable for the location of the string
+			var found_index = current_word_array.indexOf(temp);
+			//alert(found_index);
+			
+			//in the case that an invalid character is found
+			if(found_index == -1){
+				alert("there are invalid/extra/repeated characters in " + word +": Please try another word");
+				return;
+			}
+			else{
+				current_word_array[found_index] = " ";
+			}
+		
+			index++;
+		}
+		
+		
+		//make an ajax call to check to see if the value exists in the database
+		$(document).ready(function() {
+		$.ajax({
+        url: "checkWord.php",
+        dataType: 'xml',
+		type: "POST",
+		data :  { 
+        'foo': word,
+		},
+        success: function(xml){
+		
+		var x;
+		
+		$(xml).find('Word').each(function(){
+            x = $(this).find('value').text();
+			var int_x = parseInt(x);
+			//alert(int_x);
+			if(int_x == -1){
+				alert("Sorry but " + word +  " is not found in the english dictionary");
+				flag = 1;
+			}
+			
+				
+		
+		
+		//alert(flag);
+		if(flag != 1){
+		//generate the new word string
+		var temp_string = word_counter + ".  " + word;
+		word_string =  word_string + temp_string + "<br></br>";
+		//add item to the list
+		//alert("counter: " + counter);
+		//alert(word_string);
+		
+		//add string to the inter html
+		 var x = document.getElementById("myTable").rows[counter-1].cells;
+		 x[1].innerHTML = word_string;
+		
+		
+		
+		
+		//put the string onto the word array
+		word_array[word_counter] = word;
+		//alert(word_array);
+		word_counter++;
+		}
+		//reset the flag for the anagram check
+		flag = 0;
+			
+			
+			
+			
+			});
+            },
+        error: function(xhr,err){
+            alert("readyState: "+ xhr.readyState + "\nstatus: " + xhr.status + "\nerror:" + err);
+            alert("responseText: " + xhr.responseText);
+            }
+    });
+
+
+
+
+
+});
+		
+	
+		
+		
+	}
+	
+	
+	function reset_variables(){
+		word_string = "";
+		word_counter = 1;
+	
+	}
+	
+	
+
+</script>
+
+<h3>Anagram Finder 1.0<h3>
+<p>Welcome to the Anagram Finder App: By Daniel Nestor</p>
+<table id="myTable" border="1" align="center">
+ <tr>
+    <td>Word</td>
+    <td>Anagrams</td>
+  </tr>
+</table>
+<br></br>
+  <a href='#' class='button' onclick = 'get_word()'>Try Another Word</a>
+  <br></br>
+  <p>Enter Word: 
+   <input type="text" id="input_box" onsubmit = 'word_submitted_response()' name="word" value=""></p>
+  <a href='#'  onclick = 'word_submitted_response()'class='button'>Submit Word</a>
+  
+  
+  
+</html>
